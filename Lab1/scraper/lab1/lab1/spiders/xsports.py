@@ -1,7 +1,5 @@
 import scrapy
 
-from scrapy.exceptions import CloseSpider
-
 
 BASE_URLS = [
     'https://www.xsport.ua'
@@ -13,6 +11,7 @@ class Scraper(scrapy.Spider):
     name = 'xsport'
     start_urls = BASE_URLS
     custom_settings = {
+        'CLOSESPIDER_PAGECOUNT': 20,
         'ITEM_PIPELINES': {
             'lab1.pipelines.XsportPipeline': 1,
         }
@@ -25,7 +24,6 @@ class Scraper(scrapy.Spider):
     }
 
     def parse(self, response):
-        counter = 0
         text = self.extract_text(response)
         images = self.extract_images(response)
         links = self.extract_links(response)
@@ -36,12 +34,7 @@ class Scraper(scrapy.Spider):
             'url': response.url
         }
         for link in links:
-            print(link)
             yield response.follow(link, callback=self.parse)
-            if counter == PAGES_COUNT:
-                raise CloseSpider('Finished successfuly.')
-            else:
-                counter += 1
 
     def extract_links(self, response):
         result = []

@@ -1,11 +1,11 @@
 import xml.etree.ElementTree as ET
 
-def displayLinks():
+def display_links():
     mytree = ET.parse('outputs/xsport.xml')
     myroot = mytree.getroot()
-    print("HyperLinks : \n")
+    print("HyperLinks :")
     for page in myroot:
         print(page.attrib['url'])
 
-displayLinks()
+display_links()
 
